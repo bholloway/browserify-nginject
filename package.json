@@ -1,6 +1,6 @@
 {
   "name": "browserify-nginject",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Browserify transform where explicit @ngInject annotation creates preminification $inject property",
   "main": "index.js",
   "scripts": {},
@@ -11,7 +11,9 @@
   "keywords": [
     "browserify",
     "transform",
+    "browserify-transform",
     "annotate",
+    "ng-annotate",
     "ngInject",
     "angular",
     "minify",
