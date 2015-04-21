@@ -54,11 +54,28 @@ function getAnnotatedNode(comment) {
   // find the first function declaration or expression following the annotation
   var result;
   if (comment.annotates) {
-    var children = esprimaTools.orderNodes(comment.annotates);
-    result = [comment.annotates]
-      .concat(children)
-      .filter(testNode.isFunction)
-      .shift();
+    var candidateTrees, result;
+
+    // consider the context the block is in (i.e. what is its parent)
+    var parent = comment.annotates.parent;
+
+    // if comment is in a block then we can consider the 2 statements following the comment
+    if (testNode.isBlockOrProgram(parent)) {
+      var index = parent.body.indexOf(comment.annotates);
+      candidateTrees = parent.body.slice(index, index + 2);
+    }
+    // otherwise we can only consider the given node
+    else {
+      candidateTrees = [comment.annotates];
+    }
+
+    // try the nodes
+    while (!result && candidateTrees.length) {
+      result = esprimaTools
+        .orderNodes(candidateTrees.shift())
+        .filter(testNode.isFunction)
+        .shift();
+    }
   }
 
   // throw where not valid
