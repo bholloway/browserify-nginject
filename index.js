@@ -54,7 +54,7 @@ function getAnnotatedNode(comment) {
   // find the first function declaration or expression following the annotation
   var result;
   if (comment.annotates) {
-    var candidateTrees, result;
+    var candidateTrees;
 
     // consider the context the block is in (i.e. what is its parent)
     var parent = comment.annotates.parent;
