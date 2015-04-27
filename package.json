@@ -28,6 +28,6 @@
   },
   "homepage": "https://github.com/bholloway/browserify-nginject",
   "dependencies": {
-    "browserify-esprima-tools": "^1.2.0"
+    "browserify-esprima-tools": "^1.2.1"
   }
 }
