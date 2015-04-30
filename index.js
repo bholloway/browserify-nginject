@@ -15,8 +15,10 @@ var testNode     = require('./lib/ast-tests'),
  * @param {object} opt An options hash
  */
 function browserifyNgInject(opt) {
-  var options = merge({ filter: filter }, opt);
-  return esprimaTools.createTransform(updater, opt);  // json files cannot be parsed by esprima
+  var options = merge({
+    filter: filter  // try to remove files that cannot be parsed by esprima
+  }, opt);
+  return esprimaTools.createTransform(updater, options);
 }
 
 module.exports = browserifyNgInject;
