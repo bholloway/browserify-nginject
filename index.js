@@ -10,13 +10,13 @@ var testNode     = require('./lib/ast-tests'),
 
 /**
  * Esprima based explicity @ngInject annotation with sourcemaps.
- * To be processed, files must be either transformed (as indicated by an embeded source-map) or <code>js</code>
- * extension.
+ * By default, files must be either transformed (as indicated by an embeded source-map) or <code>js</code>
+ * extension. To process other files set an explicit <code>opt.filter</code>.
  * @param {object} opt An options hash
  */
 function browserifyNgInject(opt) {
   var options = merge({
-    filter: filter  // try to remove files that cannot be parsed by esprima
+    filter: defaultFilter  // remove files that cannot be parsed by esprima
   }, opt);
   return esprimaTools.createTransform(updater, options);
 }
@@ -24,13 +24,13 @@ function browserifyNgInject(opt) {
 module.exports = browserifyNgInject;
 
 /**
- * Filter method for <code>browserify-esprima-tools</code> that allows js files or files with embedded source-map.
- * @param {string} file The full filename of the file being transformed
- * @param {string} content The initial text content of the file being transformed
+ * A filter that passes files that have a source-map comment or have <code>.js</code> extension.
+ * @param {string} filename The full filename of the file being transformed
+ * @param {string} content The incoming text content of the file being transformed
  * @returns {boolean} True for included, else False
  */
-function filter(file, content) {
-  return /\.js$/.test(file) || !!converter.fromSource(content);
+function defaultFilter(filename, content) {
+  return /\.js$/.test(filename) || !!converter.fromSource(content);
 }
 
 /**
