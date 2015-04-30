@@ -1,6 +1,8 @@
 'use strict';
 
-var esprimaTools = require('browserify-esprima-tools');
+var esprimaTools = require('browserify-esprima-tools'),
+    converter    = require('convert-source-map'),
+    merge        = require('lodash.merge');
 
 var testNode     = require('./lib/ast-tests'),
     inferAngular = require('./lib/infer-angular'),
@@ -8,13 +10,26 @@ var testNode     = require('./lib/ast-tests'),
 
 /**
  * Esprima based explicity @ngInject annotation with sourcemaps.
+ * To be processed, files must be either transformed (as indicated by an embeded source-map) or <code>js</code>
+ * extension.
  * @param {object} opt An options hash
  */
 function browserifyNgInject(opt) {
-  return esprimaTools.createTransform(updater, opt);
+  var options = merge({ filter: filter }, opt);
+  return esprimaTools.createTransform(updater, opt);  // json files cannot be parsed by esprima
 }
 
 module.exports = browserifyNgInject;
+
+/**
+ * Filter method for <code>browserify-esprima-tools</code> that allows js files or files with embedded source-map.
+ * @param {string} file The full filename of the file being transformed
+ * @param {string} content The initial text content of the file being transformed
+ * @returns {boolean} True for included, else False
+ */
+function filter(file, content) {
+  return /\.js$/.test(file) || !!converter.fromSource(content);
+}
 
 /**
  * The updater function for the esprima transform
