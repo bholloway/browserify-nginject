@@ -90,7 +90,7 @@ function getAnnotatedNode(comment) {
     while (!result && candidateTrees.length) {
       result = esprimaTools
         .orderNodes(candidateTrees.shift())
-        .filter(testNode.isFunction)
+        .filter(testNode.isFunctionNotIFFE)
         .shift();
     }
   }
