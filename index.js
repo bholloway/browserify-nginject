@@ -71,28 +71,30 @@ function getAnnotatedNode(comment) {
   // find the first function declaration or expression following the annotation
   var result;
   if (comment.annotates) {
-    var candidateTrees;
+    var candidate;
 
     // consider the context the block is in (i.e. what is its parent)
     var parent = comment.annotates.parent;
 
-    // if comment is in a block then we can consider the 2 statements following the comment
+    // if comment is in a block then we need to eliminate any generated statements that may have been inserted between
+    //  the comment and the method it annotates
     if (testNode.isBlockOrProgram(parent)) {
-      var index = parent.body.indexOf(comment.annotates);
-      candidateTrees = parent.body.slice(index, index + 2);
+      var body = parent.body;
+      candidate = body
+        .slice(body.indexOf(comment.annotates))
+        .filter(testNode.not(testNode.isGeneratedCode))
+        .shift();
     }
     // otherwise we can only consider the given node
     else {
-      candidateTrees = [comment.annotates];
+      candidate = comment.annotates;
     }
 
     // try the nodes
-    while (!result && candidateTrees.length) {
-      result = esprimaTools
-        .orderNodes(candidateTrees.shift())
-        .filter(testNode.isFunctionNotIFFE)
-        .shift();
-    }
+    result = esprimaTools
+      .orderNodes(candidate)
+      .filter(testNode.isFunctionNotIFFE)
+      .shift();
   }
 
   // throw where not valid
