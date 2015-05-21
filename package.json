@@ -1,6 +1,6 @@
 {
   "name": "browserify-nginject",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Browserify transform where explicit @ngInject comment creates pre-minification $inject property",
   "main": "index.js",
   "scripts": {},
