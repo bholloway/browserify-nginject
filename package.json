@@ -1,6 +1,6 @@
 {
   "name": "browserify-nginject",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Browserify transform where explicit @ngInject comment creates pre-minification $inject property",
   "main": "index.js",
   "scripts": {},
@@ -30,6 +30,6 @@
   "dependencies": {
     "browserify-esprima-tools": "^1.6.0",
     "convert-source-map": "0.4.1",
-    "lodash.merge": "*"
+    "lodash.defaults": "*"
   }
 }
